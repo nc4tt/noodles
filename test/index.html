@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>noodles — i3wm dotfiles by ncatt</title>
+<meta name="description" content="noodles — a minimal i3wm rice by ncatt. Square corners, dual_kawase blur via picom, Catppuccin Mocha palette, JetBrains Mono, keybinds inspired by illogical-impulse.">
+<meta name="keywords" content="dotfiles, i3wm, rice, catppuccin, mocha, alacritty, picom, rofi, dunst, linux, ricing, unixporn">
+<meta name="author" content="ncatt">
+<meta name="theme-color" content="#89b4fa">
+<meta property="og:type"        content="website">
+<meta property="og:url"         content="https://git.meowlabs.online/ncatt/noodles">
+<meta property="og:title"       content="noodles — i3wm dotfiles by ncatt">
+<meta property="og:description" content="A minimal i3wm rice. Square corners, blur, Catppuccin Mocha, JetBrains Mono.">
+<meta property="og:image"       content="https://git.meowlabs.online/ncatt/noodles/raw/branch/omnicron/preview.jpg">
+<meta name="twitter:card"        content="summary_large_image">
+<meta name="twitter:title"       content="noodles — i3wm dotfiles by ncatt">
+<meta name="twitter:description" content="A minimal i3wm rice. Square corners, blur, Catppuccin Mocha, JetBrains Mono.">
+<meta name="twitter:image"       content="https://git.meowlabs.online/ncatt/noodles/raw/branch/omnicron/preview.jpg">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="alternate icon" href="favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue:      #89b4fa;
+    --blue-dim:  #4a7fcb;
+    --blue-glow: rgba(137,180,250,0.12);
+    --bg:        #0d0d0f;
+    --bg2:       #111114;
+    --bg3:       #16161a;
+    --border:    rgba(137,180,250,0.1);
+    --text:      #cdd6f4;
+    --muted:     #45475a;
+    --subtle:    #6c7086;
+    --font:      'JetBrains Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 13px;
+    line-height: 1.7;
+    min-height: 100vh;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  #cursor {
+    position: fixed; width: 6px; height: 6px;
+    background: var(--blue); border-radius: 0;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width 0.15s, height 0.15s, opacity 0.15s;
+  }
+  #cursor-ring {
+    position: fixed; width: 28px; height: 28px;
+    border: 1px solid rgba(137,180,250,0.4); border-radius: 0;
+    pointer-events: none; z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.08s linear;
+  }
+
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 1000; opacity: 0.4;
+  }
+  body::after {
+    content: ''; position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(137,180,250,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(137,180,250,0.025) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none; z-index: 0;
+  }
+
+  .container { max-width: 860px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 1; }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    border-bottom: 1px solid var(--border);
+    background: rgba(13,13,15,0.85); backdrop-filter: blur(16px);
+  }
+  nav .container { display: flex; align-items: center; justify-content: space-between; height: 52px; }
+  .nav-logo { font-size: 14px; font-weight: 700; color: var(--blue); letter-spacing: 0.05em; text-decoration: none; opacity: 0; }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a { color: var(--subtle); text-decoration: none; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--blue); }
+
+  #hero { padding: 160px 0 100px; min-height: 100vh; display: flex; align-items: center; }
+  .hero-inner { width: 100%; }
+  .hero-tag { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--blue); margin-bottom: 20px; opacity: 0; display: flex; align-items: center; gap: 10px; }
+  .hero-tag::before { content: ''; display: inline-block; width: 24px; height: 1px; background: var(--blue); }
+  h1 { font-size: clamp(48px, 8vw, 80px); font-weight: 800; line-height: 1.0; letter-spacing: -0.03em; margin-bottom: 24px; opacity: 0; }
+  h1 .word { display: inline-block; overflow: hidden; }
+  h1 .char { display: inline-block; }
+  .hero-accent { color: var(--blue); }
+  .hero-desc { font-size: 13px; color: var(--subtle); max-width: 440px; line-height: 1.8; margin-bottom: 40px; opacity: 0; }
+  .hero-actions { display: flex; gap: 14px; align-items: center; opacity: 0; }
+
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px;
+    background: var(--blue); color: #0d0d0f; text-decoration: none;
+    font-family: var(--font); font-size: 11px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase; border: none; cursor: none;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .btn-primary:hover { background: #a8c8ff; transform: translateY(-1px); }
+  .btn-ghost {
+    display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px;
+    background: transparent; color: var(--subtle); text-decoration: none;
+    font-family: var(--font); font-size: 11px; letter-spacing: 0.08em;
+    text-transform: uppercase; border: 1px solid var(--border); cursor: none;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .btn-ghost:hover { color: var(--blue); border-color: var(--blue); }
+
+  section { padding: 80px 0; border-top: 1px solid var(--border); }
+  .section-header { display: flex; align-items: baseline; gap: 16px; margin-bottom: 48px; }
+  .section-num { font-size: 10px; color: var(--blue); letter-spacing: 0.15em; opacity: 0.6; }
+  .section-title { font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text); }
+  .section-line { flex: 1; height: 1px; background: var(--border); }
+
+  /* stack */
+  .stack-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+  .stack-item { background: var(--bg); padding: 20px; transition: background 0.2s; opacity: 0; }
+  .stack-item:hover { background: var(--bg3); }
+  .stack-item:hover .stack-name { color: var(--blue); }
+  .stack-icon { font-size: 18px; margin-bottom: 10px; display: block; }
+  .stack-name { font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 4px; transition: color 0.2s; }
+  .stack-desc { font-size: 10px; color: var(--muted); letter-spacing: 0.04em; }
+
+  /* ── install ── */
+  .install-steps { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); }
+
+  .install-step {
+    background: var(--bg);
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 20px;
+    padding: 22px 24px;
+    opacity: 0;
+    transition: background 0.2s;
+  }
+  .install-step:hover { background: var(--bg3); }
+
+  .install-step-num {
+    font-size: 10px; color: var(--blue); opacity: 0.4;
+    letter-spacing: 0.1em; padding-top: 2px;
+  }
+
+  .install-step-body { display: flex; flex-direction: column; gap: 6px; }
+
+  .install-step-title {
+    font-size: 11px; font-weight: 700; color: var(--text); letter-spacing: 0.04em;
+  }
+
+  .install-step-desc { font-size: 10px; color: var(--subtle); line-height: 1.65; margin-bottom: 4px; }
+  .install-step-desc code { font-family: var(--font); color: var(--blue); background: var(--blue-glow); padding: 1px 5px; font-size: 10px; }
+
+  .install-code {
+    background: var(--bg3); border: 1px solid var(--border);
+    padding: 14px 16px; display: flex; flex-direction: column; gap: 0;
+  }
+
+  .iline { display: flex; align-items: baseline; gap: 10px; font-size: 11px; line-height: 2; }
+  .iline .p  { color: var(--blue); user-select: none; flex-shrink: 0; }
+  .iline .c  { color: var(--text); }
+  .iline .cm { color: var(--muted); font-size: 10px; }
+  .iline.dim .c { color: var(--subtle); }
+  .iline.sp { margin-top: 6px; }
+
+  .icopy {
+    align-self: flex-end; margin-top: 8px;
+    font-family: var(--font); font-size: 9px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--subtle); background: transparent;
+    border: 1px solid var(--border); padding: 3px 10px; cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .icopy:hover { color: var(--blue); border-color: var(--blue); }
+  .icopy.ok   { color: #a6e3a1; border-color: #a6e3a1; }
+
+  .install-note {
+    margin-top: 16px; background: var(--bg3);
+    border: 1px solid var(--border); border-left: 2px solid rgba(137,180,250,0.3);
+    padding: 14px 18px; opacity: 0;
+  }
+  .install-note p { font-size: 10px; color: var(--subtle); line-height: 1.7; }
+  .install-note strong { color: var(--text); font-weight: 600; }
+
+  /* configs */
+  .configs-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); }
+  .config-item { background: var(--bg); display: grid; grid-template-columns: 120px 1fr auto; align-items: center; gap: 24px; padding: 20px 24px; transition: background 0.2s; opacity: 0; cursor: default; }
+  .config-item:hover { background: var(--bg3); }
+  .config-item:hover .config-file { color: var(--blue); }
+  .config-label { font-size: 10px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+  .config-file { font-size: 12px; color: var(--text); font-weight: 600; transition: color 0.2s; }
+  .config-path { font-size: 10px; color: var(--subtle); margin-top: 3px; }
+  .config-tags { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+  .tag { font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--blue); background: var(--blue-glow); border: 1px solid rgba(137,180,250,0.15); padding: 2px 7px; }
+
+  /* keybinds */
+  .keybinds-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); }
+
+  @media (max-width: 600px) {
+    .keybinds-grid { grid-template-columns: 1fr; }
+    .config-item { grid-template-columns: 1fr; }
+    .config-tags { justify-content: flex-start; margin-top: 8px; }
+    .install-step { grid-template-columns: 1fr; }
+    .install-step-num { display: none; }
+  }
+
+  .keybind-group { background: var(--bg); padding: 24px; opacity: 0; }
+  .keybind-group-title { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--blue); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  .keybind-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid rgba(137,180,250,0.04); }
+  .keybind-row:last-child { border-bottom: none; }
+  .keybind-action { font-size: 11px; color: var(--subtle); }
+  .keybind-keys { display: flex; gap: 4px; align-items: center; }
+  kbd { font-family: var(--font); font-size: 9px; color: var(--text); background: var(--bg3); border: 1px solid var(--border); padding: 2px 6px; letter-spacing: 0.04em; }
+  .keybind-sep { font-size: 9px; color: var(--muted); margin: 0 1px; }
+
+  /* colors */
+  .palette { display: flex; gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 1px; }
+  .swatch { flex: 1; height: 48px; position: relative; opacity: 0; transition: flex 0.3s ease; cursor: default; }
+  .swatch:hover { flex: 2; }
+  .swatch-label { position: absolute; bottom: 6px; left: 8px; font-size: 8px; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0; transition: opacity 0.2s; mix-blend-mode: difference; color: white; }
+  .swatch:hover .swatch-label { opacity: 1; }
+
+  /* footer */
+  footer { border-top: 1px solid var(--border); padding: 32px 0; }
+  footer .container { display: flex; align-items: center; justify-content: space-between; }
+  .footer-left { font-size: 11px; color: var(--muted); }
+  .footer-left span { color: var(--blue); }
+  .footer-right { font-size: 10px; color: var(--muted); letter-spacing: 0.06em; }
+
+  /* preview */
+  .preview-wrap { margin-top: 32px; opacity: 0; }
+  .preview-label { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--subtle); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .preview-label::before { content: ''; display: inline-block; width: 16px; height: 1px; background: var(--subtle); }
+  .preview-frame { position: relative; border: 1px solid var(--border); overflow: hidden; line-height: 0; }
+  .preview-frame::before { content: ''; position: absolute; inset: 0; border: 1px solid rgba(137,180,250,0.08); z-index: 2; pointer-events: none; }
+  .preview-img { width: 100%; height: auto; display: block; filter: saturate(0.9) brightness(0.95); transition: filter 0.4s ease, transform 0.6s ease; }
+  .preview-frame:hover .preview-img { filter: saturate(1.05) brightness(1.0); transform: scale(1.01); }
+  .preview-scanlines { position: absolute; inset: 0; background: repeating-linear-gradient(to bottom, transparent 0px, transparent 2px, rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px); pointer-events: none; z-index: 1; opacity: 0.5; }
+
+  /* font */
+  .font-specimen { border: 1px solid var(--border); background: var(--bg3); padding: 32px 28px; margin-bottom: 1px; opacity: 0; overflow: hidden; }
+  .specimen-size { font-family: 'JetBrains Mono', monospace; color: var(--text); line-height: 1.2; letter-spacing: -0.02em; }
+  .specimen-xl { font-size: clamp(52px, 10vw, 96px); font-weight: 800; color: var(--blue); margin-bottom: 8px; }
+  .specimen-lg { font-size: clamp(28px, 5vw, 48px); font-weight: 400; color: var(--subtext1, #bac2de); margin-bottom: 8px; }
+  .specimen-md { font-size: clamp(13px, 2vw, 18px); font-weight: 300; color: var(--subtle); letter-spacing: 0.02em; }
+  .font-section-label { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--subtle); margin: 24px 0 10px; display: flex; align-items: center; gap: 10px; }
+  .font-section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .ligatures-row { display: flex; flex-wrap: wrap; gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 0; opacity: 0; }
+  .ligature-item { background: var(--bg); padding: 14px 20px; display: flex; align-items: center; gap: 10px; flex: 1; min-width: 100px; transition: background 0.2s; }
+  .ligature-item:hover { background: var(--bg3); }
+  .lig-before { font-family: 'JetBrains Mono', monospace; font-size: 15px; color: var(--subtle); }
+  .lig-arrow { font-size: 10px; color: var(--muted); }
+  .lig-after { font-family: 'JetBrains Mono', monospace; font-size: 15px; color: var(--blue); font-weight: 600; }
+  .code-sample { background: var(--bg3); border: 1px solid var(--border); padding: 20px 24px; font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.8; opacity: 0; }
+  .code-line { white-space: pre; }
+  .tok-comment { color: #45475a; } .tok-key { color: #89b4fa; } .tok-bracket { color: #6c7086; }
+  .tok-eq { color: #cba6f7; } .tok-num { color: #fab387; } .tok-str { color: #a6e3a1; }
+  .font-stats { display: flex; gap: 1px; background: var(--border); border: 1px solid var(--border); margin-top: 1px; opacity: 0; }
+  .font-stat { flex: 1; background: var(--bg); padding: 18px 16px; text-align: center; transition: background 0.2s; }
+  .font-stat:hover { background: var(--bg3); }
+  .font-stat-val { font-size: 22px; font-weight: 800; color: var(--blue); letter-spacing: -0.02em; line-height: 1; margin-bottom: 6px; }
+  .font-stat-key { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+
+  /* misc */
+  ::-webkit-scrollbar { width: 3px; } ::-webkit-scrollbar-track { background: var(--bg); } ::-webkit-scrollbar-thumb { background: var(--blue-dim); }
+  .glow-dot { display: inline-block; width: 6px; height: 6px; background: var(--blue); border-radius: 0; margin-right: 6px; animation: pulse-dot 2s ease-in-out infinite; }
+  @keyframes pulse-dot { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.8); } }
+  .term-block { background: var(--bg3); border: 1px solid var(--border); padding: 20px 24px; margin-top: 32px; opacity: 0; position: relative; }
+  .term-block::before { content: '$ '; color: var(--blue); }
+  .term-text { color: var(--subtle); font-size: 12px; }
+  .term-cursor { display: inline-block; width: 7px; height: 13px; background: var(--blue); vertical-align: middle; margin-left: 2px; animation: blink 1s step-end infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .config-item::after, .stack-item::after { content: none; }
+  .active-section { border-left: 2px solid var(--blue); padding-left: 16px; }
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- Nav -->
+<nav id="navbar">
+  <div class="container">
+    <a href="#" class="nav-logo" id="nav-logo">noodles<span style="color:var(--subtle)">.</span></a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#stack">stack</a></li>
+      <li><a href="#install">install</a></li>
+      <li><a href="#configs">configs</a></li>
+      <li><a href="#keybinds">keybinds</a></li>
+      <li><a href="#colors">colors</a></li>
+      <li><a href="#font">font</a></li>
+      <li><a href="https://git.meowlabs.online/ncatt/noodles" target="_blank">repo ↗</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section id="hero">
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-tag" id="hero-tag">dotfiles / ncatt</div>
+      <h1 id="hero-title">
+        <span class="hero-accent">noodles</span><br>
+        <span style="color:var(--subtle); font-size:0.55em; font-weight:300; letter-spacing:0.01em">i3wm · catppuccin mocha</span>
+      </h1>
+      <p class="hero-desc" id="hero-desc">
+        A minimal, opinionated i3wm rice. Square corners, blur via picom,
+        Catppuccin Mocha palette, and keybinds inspired by illogical-impulse.
+      </p>
+      <div class="hero-actions" id="hero-actions">
+        <a href="https://git.meowlabs.online/ncatt/noodles" target="_blank" class="btn-primary">↓ clone repo</a>
+        <a href="#install" class="btn-ghost">how to install</a>
+      </div>
+      <div class="term-block" id="term-block">
+        <span class="term-text">git clone https://git.meowlabs.online/ncatt/noodles</span>
+        <span class="term-cursor"></span>
+      </div>
+      <div class="preview-wrap" id="preview-wrap">
+        <div class="preview-label">preview</div>
+        <div class="preview-frame">
+          <img src="https://git.meowlabs.online/ncatt/noodles/raw/branch/omnicron/preview.jpg" alt="noodles rice preview" class="preview-img" id="preview-img"/>
+          <div class="preview-scanlines"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stack -->
+<section id="stack">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <span class="section-title">stack</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="stack-grid">
+      <div class="stack-item"><span class="stack-icon">▣</span><div class="stack-name">i3-gaps</div><div class="stack-desc">window manager</div></div>
+      <div class="stack-item"><span class="stack-icon">◈</span><div class="stack-name">alacritty</div><div class="stack-desc">terminal emulator</div></div>
+      <div class="stack-item"><span class="stack-icon">◎</span><div class="stack-name">picom</div><div class="stack-desc">compositor / blur</div></div>
+      <div class="stack-item"><span class="stack-icon">◐</span><div class="stack-name">rofi</div><div class="stack-desc">app launcher</div></div>
+      <div class="stack-item"><span class="stack-icon">◆</span><div class="stack-name">dunst</div><div class="stack-desc">notifications</div></div>
+      <div class="stack-item"><span class="stack-icon">◉</span><div class="stack-name">fish</div><div class="stack-desc">shell</div></div>
+      <div class="stack-item"><span class="stack-icon">▸</span><div class="stack-name">pipewire</div><div class="stack-desc">audio server</div></div>
+      <div class="stack-item"><span class="stack-icon">◇</span><div class="stack-name">feh</div><div class="stack-desc">wallpaper setter</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Install -->
+<section id="install">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <span class="section-title">installation</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="install-steps">
+
+      <div class="install-step">
+        <div class="install-step-num">01</div>
+        <div class="install-step-body">
+          <div class="install-step-title">clone the repo</div>
+          <div class="install-step-desc">clone noodles anywhere and enter the directory.</div>
+          <div class="install-code">
+            <div class="iline"><span class="p">$</span><span class="c">git clone https://git.meowlabs.online/ncatt/noodles</span></div>
+            <div class="iline"><span class="p">$</span><span class="c">cd noodles</span></div>
+            <button class="icopy" onclick="icopy(this, 'git clone https://git.meowlabs.online/ncatt/noodles\ncd noodles')">copy</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="install-step">
+        <div class="install-step-num">02</div>
+        <div class="install-step-body">
+          <div class="install-step-title">run install script</div>
+          <div class="install-step-desc">copies all configs to <code>~/.config/</code>. backs up existing files automatically.</div>
+          <div class="install-code">
+            <div class="iline"><span class="p">$</span><span class="c">bash install.sh</span></div>
+            <button class="icopy" onclick="icopy(this, 'bash install.sh')">copy</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="install-step">
+        <div class="install-step-num">03</div>
+        <div class="install-step-body">
+          <div class="install-step-title">optional scripts</div>
+          <div class="install-step-desc">install missing packages or fix a broken pipewire audio stack.</div>
+          <div class="install-code">
+            <div class="iline"><span class="p">#</span><span class="cm">install required packages (arch)</span></div>
+            <div class="iline dim"><span class="p">$</span><span class="c">bash pkgs-install.sh</span></div>
+            <div class="iline sp"><span class="p">#</span><span class="cm">fix pipewire if audio is not working</span></div>
+            <div class="iline dim"><span class="p">$</span><span class="c">bash pipewire-fix.sh</span></div>
+            <button class="icopy" onclick="icopy(this, 'bash pkgs-install.sh\nbash pipewire-fix.sh')">copy</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="install-note" id="install-note">
+      <p><strong>arch linux only.</strong> pkgs-install.sh uses pacman and yay — install yay before running it. pipewire-fix.sh removes stale lock files and restarts the audio stack. safe to run any time audio stops working.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Configs -->
+<section id="configs">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <span class="section-title">configs</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="configs-list">
+      <div class="config-item">
+        <div class="config-label">i3</div>
+        <div><div class="config-file">config</div><div class="config-path">~/.config/i3/config</div></div>
+        <div class="config-tags"><span class="tag">wm</span><span class="tag">keybinds</span><span class="tag">gaps</span></div>
+      </div>
+      <div class="config-item">
+        <div class="config-label">alacritty</div>
+        <div><div class="config-file">alacritty.toml</div><div class="config-path">~/.config/alacritty/alacritty.toml</div></div>
+        <div class="config-tags"><span class="tag">terminal</span><span class="tag">catppuccin</span><span class="tag">opacity</span></div>
+      </div>
+      <div class="config-item">
+        <div class="config-label">picom</div>
+        <div><div class="config-file">picom.conf</div><div class="config-path">~/.config/picom/picom.conf</div></div>
+        <div class="config-tags"><span class="tag">blur</span><span class="tag">shadows</span><span class="tag">fading</span></div>
+      </div>
+      <div class="config-item">
+        <div class="config-label">rofi</div>
+        <div><div class="config-file">config.rasi</div><div class="config-path">~/.config/rofi/config.rasi</div></div>
+        <div class="config-tags"><span class="tag">launcher</span><span class="tag">theme</span></div>
+      </div>
+      <div class="config-item">
+        <div class="config-label">dunst</div>
+        <div><div class="config-file">dunstrc</div><div class="config-path">~/.config/dunst/dunstrc</div></div>
+        <div class="config-tags"><span class="tag">notifs</span><span class="tag">urgency</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Keybinds -->
+<section id="keybinds">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <span class="section-title">keybinds</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="keybinds-grid">
+      <div class="keybind-group">
+        <div class="keybind-group-title">apps</div>
+        <div class="keybind-row"><span class="keybind-action">terminal</span><div class="keybind-keys"><kbd>super</kbd><span class="keybind-sep">+</span><kbd>enter</kbd></div></div>
+        <div class="keybind-row"><span class="keybind-action">launcher</span><div class="keybind-keys"><kbd>super</kbd><span class="keybind-sep">+</span><kbd>space</kbd></div></div>
+        <div class="keybind-row"><span class="keybind-action">file manager</span><div class="keybind-keys"><kbd>super</kbd><span class="keybind-sep">+</span><kbd>e</kbd></div></div>
+        <div class="keybind-row"><span class="keybind-action">browser</span><div class="keybind-keys"><kbd>super</kbd><span class="keybind-sep">+</span><kbd>b</kbd></div></div>
+        <div class="keybind-row"><span class="keybind-action">clipboard</span><div class="keybind-keys"><kbd>super</kbd><span class="keybind-sep">+</span><kbd>v</kbd></div></div>
+        <div class="keybind-row"><span class="keybind-action">emoji picker</span><div class="keybind-keys"><kbd>super</kbd><span class="keybind-sep">+</span><kbd>.</kbd></div></div>
+      </div>
+      <div class="keybind-group">
+        <div class="keybind-group-title">windows</div>
+        <div class="keybind-row"><span class="keybind-action">focus</span><div class="keybind-keys"><kbd>super</kbd><span class="keybind-sep">+</span><kbd>h j k ;</kbd></div></div>
+        <div class="keybind-row"><span class="keybind-action">move</span><div class="keybind-keys"><kbd>super</kbd><span class="keybind-sep">+</span><kbd>shift</kbd><span class="keybind-sep">+</span><kbd>hjkl</kbd></div></div>
+        <div class="keybind-row"><span class="keybind-action">resize</span><div class="keybind-keys"><kbd>super</kbd><span class="keybind-sep">+</span><kbd>ctrl</kbd><span class="keybind-sep">+</span><kbd>hjkl</kbd></div></div>
+        <div class="keybind-row"><span class="keybind-action">kill</span><div class="keybind-keys"><kbd>super</kbd><span class="keybind-sep">+</span><kbd>q</kbd></div></div>
+        <div class="keybind-row"><span class="keybind-action">fullscreen</span><div class="keybind-keys"><kbd>super</kbd><span class="keybind-sep">+</span><kbd>f</kbd></div></div>
+        <div class="keybind-row"><span class="keybind-action">floating</span><div class="keybind-keys"><kbd>super</kbd><span class="keybind-sep">+</span><kbd>t</kbd></div></div>
+      </div>
+      <div class="keybind-group">
+        <div class="keybind-group-title">workspaces</div>
+        <div class="keybind-row"><span class="keybind-action">switch</span><div class="keybind-keys"><kbd>super</kbd><span class="keybind-sep">+</span><kbd>1–9</kbd></div></div>
+        <div class="keybind-row"><span class="keybind-action">move window</span><div class="keybind-keys"><kbd>super</kbd><span class="keybind-sep">+</span><kbd>shift</kbd><span class="keybind-sep">+</span><kbd>1–9</kbd></div></div>
+        <div class="keybind-row"><span class="keybind-action">move silent</span><div class="keybind-keys"><kbd>super</kbd><span class="keybind-sep">+</span><kbd>ctrl</kbd><span class="keybind-sep">+</span><kbd>1–9</kbd></div></div>
+        <div class="keybind-row"><span class="keybind-action">next / prev</span><div class="keybind-keys"><kbd>super</kbd><span class="keybind-sep">+</span><kbd>tab</kbd></div></div>
+      </div>
+      <div class="keybind-group">
+        <div class="keybind-group-title">system</div>
+        <div class="keybind-row"><span class="keybind-action">lock</span><div class="keybind-keys"><kbd>super</kbd><span class="keybind-sep">+</span><kbd>l</kbd></div></div>
+        <div class="keybind-row"><span class="keybind-action">reload</span><div class="keybind-keys"><kbd>super</kbd><span class="keybind-sep">+</span><kbd>shift+r</kbd></div></div>
+        <div class="keybind-row"><span class="keybind-action">screenshot</span><div class="keybind-keys"><kbd>super</kbd><span class="keybind-sep">+</span><kbd>shift+s</kbd></div></div>
+        <div class="keybind-row"><span class="keybind-action">volume up/down</span><div class="keybind-keys"><kbd>super</kbd><span class="keybind-sep">+</span><kbd>f2/f3</kbd></div></div>
+        <div class="keybind-row"><span class="keybind-action">brightness</span><div class="keybind-keys"><kbd>super</kbd><span class="keybind-sep">+</span><kbd>f7/f8</kbd></div></div>
+        <div class="keybind-row"><span class="keybind-action">exit</span><div class="keybind-keys"><kbd>super</kbd><span class="keybind-sep">+</span><kbd>shift+e</kbd></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Colors -->
+<section id="colors">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <span class="section-title">palette — catppuccin mocha</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="palette">
+      <div class="swatch" style="background:#f38ba8"><span class="swatch-label">red</span></div>
+      <div class="swatch" style="background:#fab387"><span class="swatch-label">peach</span></div>
+      <div class="swatch" style="background:#f9e2af"><span class="swatch-label">yellow</span></div>
+      <div class="swatch" style="background:#a6e3a1"><span class="swatch-label">green</span></div>
+      <div class="swatch" style="background:#94e2d5"><span class="swatch-label">teal</span></div>
+      <div class="swatch" style="background:#89b4fa"><span class="swatch-label">blue ★</span></div>
+      <div class="swatch" style="background:#b4befe"><span class="swatch-label">lavender</span></div>
+      <div class="swatch" style="background:#cba6f7"><span class="swatch-label">mauve</span></div>
+      <div class="swatch" style="background:#f5c2e7"><span class="swatch-label">pink</span></div>
+    </div>
+    <div class="palette" style="margin-top:1px">
+      <div class="swatch" style="background:#11111b"><span class="swatch-label">crust</span></div>
+      <div class="swatch" style="background:#181825"><span class="swatch-label">mantle</span></div>
+      <div class="swatch" style="background:#1e1e2e"><span class="swatch-label">base</span></div>
+      <div class="swatch" style="background:#313244"><span class="swatch-label">surface0</span></div>
+      <div class="swatch" style="background:#45475a"><span class="swatch-label">surface1</span></div>
+      <div class="swatch" style="background:#585b70"><span class="swatch-label">surface2</span></div>
+      <div class="swatch" style="background:#6c7086"><span class="swatch-label">overlay0</span></div>
+      <div class="swatch" style="background:#a6adc8"><span class="swatch-label">subtext0</span></div>
+      <div class="swatch" style="background:#cdd6f4"><span class="swatch-label">text</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Font -->
+<section id="font">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <span class="section-title">font — jetbrains mono</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="font-specimen" id="font-specimen">
+      <div class="specimen-size specimen-xl">AaBbCc</div>
+      <div class="specimen-size specimen-lg">0123456789</div>
+      <div class="specimen-size specimen-md">!@#$%^&amp;*()_+-=[]{}|;':",./?</div>
+    </div>
+    <div class="font-section-label">ligatures</div>
+    <div class="ligatures-row" id="ligatures-row">
+      <div class="ligature-item"><span class="lig-before">-&gt;</span><span class="lig-arrow">→</span><span class="lig-after">→</span></div>
+      <div class="ligature-item"><span class="lig-before">=&gt;</span><span class="lig-arrow">→</span><span class="lig-after">⇒</span></div>
+      <div class="ligature-item"><span class="lig-before">!=</span><span class="lig-arrow">→</span><span class="lig-after">≠</span></div>
+      <div class="ligature-item"><span class="lig-before">==</span><span class="lig-arrow">→</span><span class="lig-after">≡</span></div>
+      <div class="ligature-item"><span class="lig-before">&lt;=</span><span class="lig-arrow">→</span><span class="lig-after">≤</span></div>
+      <div class="ligature-item"><span class="lig-before">&gt;=</span><span class="lig-arrow">→</span><span class="lig-after">≥</span></div>
+      <div class="ligature-item"><span class="lig-before">//</span><span class="lig-arrow">→</span><span class="lig-after">//</span></div>
+      <div class="ligature-item"><span class="lig-before">/*</span><span class="lig-arrow">→</span><span class="lig-after">/*</span></div>
+    </div>
+    <div class="font-section-label">in use — size 10</div>
+    <div class="code-sample" id="code-sample">
+      <div class="code-line"><span class="tok-comment"># ~/.config/alacritty/alacritty.toml</span></div>
+      <div class="code-line"></div>
+      <div class="code-line"><span class="tok-bracket">[</span><span class="tok-key">font</span><span class="tok-bracket">]</span></div>
+      <div class="code-line"><span class="tok-key">size</span> <span class="tok-eq">=</span> <span class="tok-num">10.0</span></div>
+      <div class="code-line"></div>
+      <div class="code-line"><span class="tok-bracket">[</span><span class="tok-key">font.normal</span><span class="tok-bracket">]</span></div>
+      <div class="code-line"><span class="tok-key">family</span> <span class="tok-eq">=</span> <span class="tok-str">"JetBrains Mono"</span></div>
+      <div class="code-line"><span class="tok-key">style</span>  <span class="tok-eq">=</span> <span class="tok-str">"Regular"</span></div>
+      <div class="code-line"></div>
+      <div class="code-line"><span class="tok-bracket">[</span><span class="tok-key">font.bold</span><span class="tok-bracket">]</span></div>
+      <div class="code-line"><span class="tok-key">family</span> <span class="tok-eq">=</span> <span class="tok-str">"JetBrains Mono"</span></div>
+      <div class="code-line"><span class="tok-key">style</span>  <span class="tok-eq">=</span> <span class="tok-str">"Bold"</span></div>
+    </div>
+    <div class="font-stats" id="font-stats">
+      <div class="font-stat"><div class="font-stat-val">8</div><div class="font-stat-key">weights</div></div>
+      <div class="font-stat"><div class="font-stat-val">100+</div><div class="font-stat-key">ligatures</div></div>
+      <div class="font-stat"><div class="font-stat-val">10pt</div><div class="font-stat-key">used size</div></div>
+      <div class="font-stat"><div class="font-stat-val">OFL</div><div class="font-stat-key">license</div></div>
+      <div class="font-stat"><div class="font-stat-val">NF</div><div class="font-stat-key">nerd font patched</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="footer-left"><span class="glow-dot"></span><span>noodles</span> by <span>ncatt</span></div>
+    <div class="footer-right">
+      <a href="https://git.meowlabs.online/ncatt/noodles" target="_blank"
+         style="color:var(--subtle);text-decoration:none;transition:color 0.2s"
+         onmouseover="this.style.color='var(--blue)'" onmouseout="this.style.color='var(--subtle)'">
+        git.meowlabs.online/ncatt/noodles ↗
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// cursor
+const cursor = document.getElementById('cursor');
+const cursorRing = document.getElementById('cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.left = mx+'px'; cursor.style.top = my+'px'; });
+function animateRing() { rx += (mx-rx)*0.12; ry += (my-ry)*0.12; cursorRing.style.left = rx+'px'; cursorRing.style.top = ry+'px'; requestAnimationFrame(animateRing); }
+animateRing();
+document.querySelectorAll('a, button, .config-item, .stack-item, .swatch, .install-step').forEach(el => {
+  el.addEventListener('mouseenter', () => { cursor.style.width='12px'; cursor.style.height='12px'; cursorRing.style.width='44px'; cursorRing.style.height='44px'; cursorRing.style.borderColor='rgba(137,180,250,0.7)'; });
+  el.addEventListener('mouseleave', () => { cursor.style.width='6px'; cursor.style.height='6px'; cursorRing.style.width='28px'; cursorRing.style.height='28px'; cursorRing.style.borderColor='rgba(137,180,250,0.4)'; });
+});
+
+// copy
+function icopy(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'copied'; btn.classList.add('ok');
+    setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('ok'); }, 2000);
+  });
+}
+
+// nav
+anime({ targets: '#nav-logo', opacity: [0,1], translateY: [-8,0], duration: 600, delay: 200, easing: 'easeOutExpo' });
+anime({ targets: '#nav-links li', opacity: [0,1], translateY: [-6,0], duration: 500, delay: anime.stagger(60, {start:300}), easing: 'easeOutExpo' });
+
+// hero
+anime({ targets: '#hero-tag',     opacity: [0,1], translateX: [-16,0], duration: 700, delay: 400,  easing: 'easeOutExpo' });
+anime({ targets: '#hero-title',   opacity: [0,1], translateY: [30,0],  duration: 900, delay: 500,  easing: 'easeOutExpo' });
+anime({ targets: '#hero-desc',    opacity: [0,1], translateY: [16,0],  duration: 700, delay: 700,  easing: 'easeOutExpo' });
+anime({ targets: '#hero-actions', opacity: [0,1], translateY: [12,0],  duration: 700, delay: 850,  easing: 'easeOutExpo' });
+anime({ targets: '#term-block',   opacity: [0,1], translateY: [10,0],  duration: 600, delay: 1000, easing: 'easeOutExpo' });
+anime({ targets: '#preview-wrap', opacity: [0,1], translateY: [24,0],  duration: 800, delay: 1200, easing: 'easeOutExpo' });
+
+// scroll reveals
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    const el = entry.target;
+    if (el.classList.contains('stack-item'))    anime({ targets: el, opacity: [0,1], translateY: [20,0],  duration: 500, easing: 'easeOutExpo' });
+    if (el.classList.contains('install-step'))  anime({ targets: el, opacity: [0,1], translateX: [-16,0], duration: 500, easing: 'easeOutExpo' });
+    if (el.classList.contains('install-note'))  anime({ targets: el, opacity: [0,1], translateY: [10,0],  duration: 500, easing: 'easeOutExpo' });
+    if (el.classList.contains('config-item'))   anime({ targets: el, opacity: [0,1], translateX: [-20,0], duration: 500, easing: 'easeOutExpo' });
+    if (el.classList.contains('keybind-group')) anime({ targets: el, opacity: [0,1], translateY: [16,0],  duration: 500, easing: 'easeOutExpo' });
+    if (el.classList.contains('swatch'))        anime({ targets: el, opacity: [0,1], scaleY: [0.6,1],     duration: 400, easing: 'easeOutBack' });
+    if (el.classList.contains('font-specimen')) anime({ targets: el, opacity: [0,1], translateY: [20,0],  duration: 700, easing: 'easeOutExpo' });
+    if (el.classList.contains('ligatures-row')) { anime({ targets: el.querySelectorAll('.ligature-item'), opacity: [0,1], translateY: [10,0], duration: 400, delay: anime.stagger(40), easing: 'easeOutExpo' }); el.style.opacity=1; }
+    if (el.classList.contains('code-sample'))   { anime({ targets: el.querySelectorAll('.code-line'), opacity: [0,1], translateX: [-8,0], duration: 300, delay: anime.stagger(35), easing: 'easeOutExpo' }); el.style.opacity=1; }
+    if (el.classList.contains('font-stats'))    { anime({ targets: el.querySelectorAll('.font-stat'), opacity: [0,1], translateY: [14,0], duration: 400, delay: anime.stagger(60), easing: 'easeOutExpo' }); el.style.opacity=1; }
+    observer.unobserve(el);
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.stack-item, .install-step, .install-note, .config-item, .keybind-group, .swatch, .font-specimen, .ligatures-row, .code-sample, .font-stats')
+  .forEach(el => observer.observe(el));
+
+// glitch
+const logo = document.getElementById('nav-logo');
+logo.addEventListener('mouseenter', () => {
+  anime({ targets: logo, translateX: [{value:-2,duration:50},{value:2,duration:50},{value:-1,duration:50},{value:0,duration:50}], easing: 'linear' });
+});
+
+// typing
+const termText = document.querySelector('.term-text');
+const fullText = termText.textContent;
+termText.textContent = '';
+let i = 0;
+setTimeout(() => {
+  const t = setInterval(() => { termText.textContent += fullText[i]; i++; if (i >= fullText.length) clearInterval(t); }, 28);
+}, 1200);
+</script>
+</body>
+</html>
