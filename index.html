@@ -3,7 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>noodles</title>
+<title>noodles — i3wm dotfiles by ncatt</title>
+
+<!-- Description -->
+<meta name="description" content="noodles — a minimal i3wm rice by ncatt. Square corners, dual_kawase blur via picom, Catppuccin Mocha palette, JetBrains Mono, keybinds inspired by illogical-impulse.">
+<meta name="keywords" content="dotfiles, i3wm, rice, catppuccin, mocha, alacritty, picom, rofi, dunst, linux, ricing, unixporn">
+<meta name="author" content="ncatt">
+<meta name="theme-color" content="#89b4fa">
+
+<!-- Open Graph -->
+<meta property="og:type"        content="website">
+<meta property="og:url"         content="https://git.meowlab.online/ncatt/noodles">
+<meta property="og:title"       content="noodles — i3wm dotfiles by ncatt">
+<meta property="og:description" content="A minimal i3wm rice. Square corners, blur, Catppuccin Mocha, JetBrains Mono.">
+<meta property="og:image"       content="https://git.meowlabs.online/ncatt/noodles/raw/branch/omnicron/preview.jpg">
+
+<!-- Twitter Card -->
+<meta name="twitter:card"        content="summary_large_image">
+<meta name="twitter:title"       content="noodles — i3wm dotfiles by ncatt">
+<meta name="twitter:description" content="A minimal i3wm rice. Square corners, blur, Catppuccin Mocha, JetBrains Mono.">
+<meta name="twitter:image"       content="https://git.meowlabs.online/ncatt/noodles/raw/branch/omnicron/preview.jpg">
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="alternate icon" href="favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
@@ -593,6 +616,159 @@
     opacity: 0.5;
   }
 
+  /* ── Font section ── */
+  .font-specimen {
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    padding: 32px 28px;
+    margin-bottom: 1px;
+    opacity: 0;
+    overflow: hidden;
+  }
+
+  .specimen-size {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  .specimen-xl {
+    font-size: clamp(52px, 10vw, 96px);
+    font-weight: 800;
+    color: var(--blue);
+    margin-bottom: 8px;
+  }
+
+  .specimen-lg {
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 400;
+    color: var(--subtext1, #bac2de);
+    margin-bottom: 8px;
+  }
+
+  .specimen-md {
+    font-size: clamp(13px, 2vw, 18px);
+    font-weight: 300;
+    color: var(--subtle);
+    letter-spacing: 0.02em;
+  }
+
+  .font-section-label {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--subtle);
+    margin: 24px 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .font-section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Ligatures */
+  .ligatures-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 0;
+    opacity: 0;
+  }
+
+  .ligature-item {
+    background: var(--bg);
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 100px;
+    transition: background 0.2s;
+  }
+
+  .ligature-item:hover { background: var(--bg3); }
+
+  .lig-before {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px;
+    color: var(--subtle);
+  }
+
+  .lig-arrow {
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .lig-after {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px;
+    color: var(--blue);
+    font-weight: 600;
+  }
+
+  /* Code sample */
+  .code-sample {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 20px 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.8;
+    opacity: 0;
+  }
+
+  .code-line { white-space: pre; }
+  .tok-comment { color: #45475a; }
+  .tok-key     { color: #89b4fa; }
+  .tok-bracket { color: #6c7086; }
+  .tok-eq      { color: #cba6f7; }
+  .tok-num     { color: #fab387; }
+  .tok-str     { color: #a6e3a1; }
+
+  /* Stats */
+  .font-stats {
+    display: flex;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-top: 1px;
+    opacity: 0;
+  }
+
+  .font-stat {
+    flex: 1;
+    background: var(--bg);
+    padding: 18px 16px;
+    text-align: center;
+    transition: background 0.2s;
+  }
+
+  .font-stat:hover { background: var(--bg3); }
+
+  .font-stat-val {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--blue);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .font-stat-key {
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
   /* ── Scrollbar ── */
   ::-webkit-scrollbar { width: 3px; }
   ::-webkit-scrollbar-track { background: var(--bg); }
@@ -672,6 +848,7 @@
       <li><a href="#configs">configs</a></li>
       <li><a href="#keybinds">keybinds</a></li>
       <li><a href="#colors">colors</a></li>
+      <li><a href="#font">font</a></li>
       <li><a href="https://git.meowlab.online/ncatt/noodles" target="_blank">repo ↗</a></li>
     </ul>
   </div>
@@ -989,6 +1166,79 @@
   </div>
 </section>
 
+<!-- Font -->
+<section id="font">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <span class="section-title">font — jetbrains mono</span>
+      <div class="section-line"></div>
+    </div>
+
+    <!-- Specimen large -->
+    <div class="font-specimen" id="font-specimen">
+      <div class="specimen-size specimen-xl">AaBbCc</div>
+      <div class="specimen-size specimen-lg">0123456789</div>
+      <div class="specimen-size specimen-md">!@#$%^&amp;*()_+-=[]{}|;':",./?</div>
+    </div>
+
+    <!-- Ligature showcase -->
+    <div class="font-section-label">ligatures</div>
+    <div class="ligatures-row" id="ligatures-row">
+      <div class="ligature-item"><span class="lig-before">-&gt;</span><span class="lig-arrow">→</span><span class="lig-after">→</span></div>
+      <div class="ligature-item"><span class="lig-before">=&gt;</span><span class="lig-arrow">→</span><span class="lig-after">⇒</span></div>
+      <div class="ligature-item"><span class="lig-before">!=</span><span class="lig-arrow">→</span><span class="lig-after">≠</span></div>
+      <div class="ligature-item"><span class="lig-before">==</span><span class="lig-arrow">→</span><span class="lig-after">≡</span></div>
+      <div class="ligature-item"><span class="lig-before">&lt;=</span><span class="lig-arrow">→</span><span class="lig-after">≤</span></div>
+      <div class="ligature-item"><span class="lig-before">&gt;=</span><span class="lig-arrow">→</span><span class="lig-after">≥</span></div>
+      <div class="ligature-item"><span class="lig-before">//</span><span class="lig-arrow">→</span><span class="lig-after">//</span></div>
+      <div class="ligature-item"><span class="lig-before">/*</span><span class="lig-arrow">→</span><span class="lig-after">/*</span></div>
+    </div>
+
+    <!-- Code sample -->
+    <div class="font-section-label">in use — size 10</div>
+    <div class="code-sample" id="code-sample">
+      <div class="code-line"><span class="tok-comment"># ~/.config/alacritty/alacritty.toml</span></div>
+      <div class="code-line"></div>
+      <div class="code-line"><span class="tok-bracket">[</span><span class="tok-key">font</span><span class="tok-bracket">]</span></div>
+      <div class="code-line"><span class="tok-key">size</span> <span class="tok-eq">=</span> <span class="tok-num">10.0</span></div>
+      <div class="code-line"></div>
+      <div class="code-line"><span class="tok-bracket">[</span><span class="tok-key">font.normal</span><span class="tok-bracket">]</span></div>
+      <div class="code-line"><span class="tok-key">family</span> <span class="tok-eq">=</span> <span class="tok-str">"JetBrains Mono"</span></div>
+      <div class="code-line"><span class="tok-key">style</span>  <span class="tok-eq">=</span> <span class="tok-str">"Regular"</span></div>
+      <div class="code-line"></div>
+      <div class="code-line"><span class="tok-bracket">[</span><span class="tok-key">font.bold</span><span class="tok-bracket">]</span></div>
+      <div class="code-line"><span class="tok-key">family</span> <span class="tok-eq">=</span> <span class="tok-str">"JetBrains Mono"</span></div>
+      <div class="code-line"><span class="tok-key">style</span>  <span class="tok-eq">=</span> <span class="tok-str">"Bold"</span></div>
+    </div>
+
+    <!-- Stats row -->
+    <div class="font-stats" id="font-stats">
+      <div class="font-stat">
+        <div class="font-stat-val">8</div>
+        <div class="font-stat-key">weights</div>
+      </div>
+      <div class="font-stat">
+        <div class="font-stat-val">100+</div>
+        <div class="font-stat-key">ligatures</div>
+      </div>
+      <div class="font-stat">
+        <div class="font-stat-val">10pt</div>
+        <div class="font-stat-key">used size</div>
+      </div>
+      <div class="font-stat">
+        <div class="font-stat-val">OFL</div>
+        <div class="font-stat-key">license</div>
+      </div>
+      <div class="font-stat">
+        <div class="font-stat-val">NF</div>
+        <div class="font-stat-key">nerd font patched</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
 <!-- Footer -->
 <footer>
   <div class="container">
@@ -1168,11 +1418,57 @@ const observer = new IntersectionObserver((entries) => {
       });
     }
 
+    if (el.classList.contains('font-specimen')) {
+      anime({
+        targets: el,
+        opacity: [0, 1],
+        translateY: [20, 0],
+        duration: 700,
+        easing: 'easeOutExpo'
+      });
+    }
+
+    if (el.classList.contains('ligatures-row')) {
+      anime({
+        targets: el.querySelectorAll('.ligature-item'),
+        opacity: [0, 1],
+        translateY: [10, 0],
+        duration: 400,
+        delay: anime.stagger(40),
+        easing: 'easeOutExpo'
+      });
+      el.style.opacity = 1;
+    }
+
+    if (el.classList.contains('code-sample')) {
+      anime({
+        targets: el.querySelectorAll('.code-line'),
+        opacity: [0, 1],
+        translateX: [-8, 0],
+        duration: 300,
+        delay: anime.stagger(35),
+        easing: 'easeOutExpo'
+      });
+      el.style.opacity = 1;
+    }
+
+    if (el.classList.contains('font-stats')) {
+      anime({
+        targets: el.querySelectorAll('.font-stat'),
+        opacity: [0, 1],
+        translateY: [14, 0],
+        duration: 400,
+        delay: anime.stagger(60),
+        easing: 'easeOutExpo'
+      });
+      el.style.opacity = 1;
+    }
+
     observer.unobserve(el);
   });
 }, { threshold: 0.1 });
 
-document.querySelectorAll('.stack-item, .config-item, .keybind-group, .swatch')
+document.querySelectorAll('.stack-item, .config-item, .keybind-group, .swatch, .font-specimen, .ligatures-row, .code-sample, .font-stats')
   .forEach(el => observer.observe(el));
 
 // ── Glitch effect on logo hover ───────────────────────────
