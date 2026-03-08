@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@800&amp;display=swap');
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="32" height="32" fill="#1e1e2e"/>
+
+  <!-- Left bracket -->
+  <rect x="5" y="5"  width="3" height="2"  fill="#89b4fa"/>
+  <rect x="5" y="5"  width="2" height="22" fill="#89b4fa"/>
+  <rect x="5" y="25" width="3" height="2"  fill="#89b4fa"/>
+
+  <!-- Right bracket -->
+  <rect x="24" y="5"  width="3" height="2"  fill="#89b4fa"/>
+  <rect x="26" y="5"  width="2" height="22" fill="#89b4fa"/>
+  <rect x="24" y="25" width="3" height="2"  fill="#89b4fa"/>
+
+  <!-- Center dot — blinking cursor style -->
+  <rect x="13" y="13" width="6" height="6" fill="#cba6f7"/>
+  <rect x="14" y="14" width="4" height="4" fill="#89b4fa"/>
+</svg>
