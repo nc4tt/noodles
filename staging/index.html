@@ -771,7 +771,7 @@ logo.addEventListener('mouseenter', () => {
 
 // typing
 const termText = document.querySelector('.term-text');
-const fullText = termText.textContent;
+const fullText = termText.getAttribute('data-full') || termText.textContent;
 termText.textContent = '';
 let i = 0;
 setTimeout(() => {
@@ -788,6 +788,25 @@ const isStaging = window.location.href.includes('/staging') ||
                   window.location.hostname.includes('nc4tt.github.io');
 
 if (isStaging) {
+  // patch term-block clone command
+  const termText = document.querySelector('.term-text');
+  if (termText) termText.setAttribute('data-full', 'git clone https://git.meowlabs.online/ncatt/noodles -b staging');
+
+  // patch install section clone line
+  document.querySelectorAll('.iline .c').forEach(el => {
+    if (el.textContent.trim().startsWith('git clone')) {
+      el.textContent = 'git clone https://git.meowlabs.online/ncatt/noodles -b staging';
+    }
+  });
+
+  // patch copy button for clone step
+  document.querySelectorAll('.icopy').forEach(btn => {
+    const handler = btn.getAttribute('onclick') || '';
+    if (handler.includes('git clone')) {
+      btn.setAttribute('onclick', "icopy(this, 'git clone https://git.meowlabs.online/ncatt/noodles -b staging\\ncd noodles')");
+    }
+  });
+
   setTimeout(() => {
     document.getElementById('staging-toast').classList.add('show');
   }, 2000);
