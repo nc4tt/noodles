@@ -274,7 +274,102 @@
   .font-stat-val { font-size: 22px; font-weight: 800; color: var(--blue); letter-spacing: -0.02em; line-height: 1; margin-bottom: 6px; }
   .font-stat-key { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
 
-  /* misc */
+  .staging-badge {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 6px;
+  }
+  .staging-badge a {
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #0d0d0f;
+    background: var(--blue);
+    padding: 2px 8px;
+    text-decoration: none;
+    font-weight: 700;
+    transition: background 0.2s;
+    cursor: none;
+  }
+  .staging-badge a:hover { background: #a8c8ff; }
+
+  /* staging section */
+  .staging-card {
+    margin-top: 20px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-left: 2px solid var(--blue);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    opacity: 0;
+    transition: background 0.2s;
+  }
+  .staging-card:hover { background: #1a1a1f; }
+  .staging-card-left { display: flex; flex-direction: column; gap: 4px; }
+  .staging-card-label {
+    font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--blue); display: flex; align-items: center; gap: 6px;
+  }
+  .staging-dot {
+    width: 5px; height: 5px; background: var(--blue); border-radius: 0;
+    animation: pulse-dot 1.5s ease-in-out infinite;
+  }
+  .staging-card-desc { font-size: 10px; color: var(--subtle); line-height: 1.6; }
+  .staging-card-link {
+    font-family: var(--font); font-size: 10px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--blue); text-decoration: none;
+    border: 1px solid rgba(137,180,250,0.25); padding: 6px 14px;
+    white-space: nowrap; transition: border-color 0.2s, background 0.2s; cursor: none;
+    flex-shrink: 0;
+  }
+  .staging-card-link:hover { border-color: var(--blue); background: var(--blue-glow); }
+
+  /* ── staging toast ── */
+  #staging-toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    z-index: 9000;
+    background: var(--bg3);
+    border: 1px solid rgba(137,180,250,0.25);
+    border-left: 2px solid var(--blue);
+    padding: 12px 18px 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 320px;
+    max-width: 480px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  #staging-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: auto;
+  }
+  .toast-dot {
+    width: 6px; height: 6px; flex-shrink: 0;
+    background: var(--blue);
+    animation: pulse-dot 1.5s ease-in-out infinite;
+  }
+  .toast-body { display: flex; flex-direction: column; gap: 2px; flex: 1; }
+  .toast-title {
+    font-size: 10px; font-weight: 700; color: var(--blue);
+    letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .toast-msg { font-size: 10px; color: var(--subtle); line-height: 1.5; }
+  .toast-close {
+    font-family: var(--font); font-size: 10px; color: var(--muted);
+    background: transparent; border: none; cursor: pointer;
+    padding: 2px 4px; line-height: 1; flex-shrink: 0;
+    transition: color 0.2s;
+  }
+  .toast-close:hover { color: var(--text); }
   ::-webkit-scrollbar { width: 3px; } ::-webkit-scrollbar-track { background: var(--bg); } ::-webkit-scrollbar-thumb { background: var(--blue-dim); }
   .glow-dot { display: inline-block; width: 6px; height: 6px; background: var(--blue); border-radius: 0; margin-right: 6px; animation: pulse-dot 2s ease-in-out infinite; }
   @keyframes pulse-dot { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.8); } }
@@ -304,6 +399,7 @@
       <li><a href="#colors">colors</a></li>
       <li><a href="#font">font</a></li>
       <li><a href="https://git.meowlabs.online/ncatt/noodles" target="_blank">repo ↗</a></li>
+      <li><a href="https://nc4tt.github.io/noodles/staging" target="_blank" style="color:var(--blue);opacity:0.7">beta ↗</a></li>
     </ul>
   </div>
 </nav>
@@ -312,7 +408,7 @@
 <section id="hero">
   <div class="container">
     <div class="hero-inner">
-      <div class="hero-tag" id="hero-tag">dotfiles / ncatt</div>
+      <div class="hero-tag" id="hero-tag">dotfiles / ncatt <span class="staging-badge"><a href="https://nc4tt.github.io/noodles/staging" target="_blank">beta available</a></span></div>
       <h1 id="hero-title">
         <span class="hero-accent">noodles</span><br>
         <span style="color:var(--subtle); font-size:0.55em; font-weight:300; letter-spacing:0.01em">i3wm · catppuccin mocha</span>
@@ -335,6 +431,13 @@
           <img src="https://git.meowlabs.online/ncatt/noodles/raw/branch/omnicron/preview.jpg" alt="noodles rice preview" class="preview-img" id="preview-img"/>
           <div class="preview-scanlines"></div>
         </div>
+      </div>
+      <div class="staging-card" id="staging-card">
+        <div class="staging-card-left">
+          <div class="staging-card-label"><span class="staging-dot"></span>staging / beta</div>
+          <div class="staging-card-desc">a work-in-progress version of noodles with unreleased changes. may be unstable.</div>
+        </div>
+        <a href="https://nc4tt.github.io/noodles/staging" target="_blank" class="staging-card-link">open beta ↗</a>
       </div>
     </div>
   </div>
@@ -589,11 +692,16 @@
 <footer>
   <div class="container">
     <div class="footer-left"><span class="glow-dot"></span><span>noodles</span> by <span>ncatt</span></div>
-    <div class="footer-right">
+    <div class="footer-right" style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
       <a href="https://git.meowlabs.online/ncatt/noodles" target="_blank"
          style="color:var(--subtle);text-decoration:none;transition:color 0.2s"
          onmouseover="this.style.color='var(--blue)'" onmouseout="this.style.color='var(--subtle)'">
         git.meowlabs.online/ncatt/noodles ↗
+      </a>
+      <a href="https://nc4tt.github.io/noodles/staging" target="_blank"
+         style="color:var(--blue);text-decoration:none;font-size:9px;opacity:0.6;transition:opacity 0.2s;letter-spacing:0.1em"
+         onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">
+        staging / beta ↗
       </a>
     </div>
   </div>
@@ -630,7 +738,8 @@ anime({ targets: '#hero-title',   opacity: [0,1], translateY: [30,0],  duration:
 anime({ targets: '#hero-desc',    opacity: [0,1], translateY: [16,0],  duration: 700, delay: 700,  easing: 'easeOutExpo' });
 anime({ targets: '#hero-actions', opacity: [0,1], translateY: [12,0],  duration: 700, delay: 850,  easing: 'easeOutExpo' });
 anime({ targets: '#term-block',   opacity: [0,1], translateY: [10,0],  duration: 600, delay: 1000, easing: 'easeOutExpo' });
-anime({ targets: '#preview-wrap', opacity: [0,1], translateY: [24,0],  duration: 800, delay: 1200, easing: 'easeOutExpo' });
+anime({ targets: '#preview-wrap',  opacity: [0,1], translateY: [24,0],  duration: 800, delay: 1200, easing: 'easeOutExpo' });
+anime({ targets: '#staging-card', opacity: [0,1], translateY: [12,0],  duration: 600, delay: 1400, easing: 'easeOutExpo' });
 
 // scroll reveals
 const observer = new IntersectionObserver((entries) => {
@@ -668,6 +777,31 @@ let i = 0;
 setTimeout(() => {
   const t = setInterval(() => { termText.textContent += fullText[i]; i++; if (i >= fullText.length) clearInterval(t); }, 28);
 }, 1200);
+
+// ── staging toast detection
+function dismissToast() {
+  const toast = document.getElementById('staging-toast');
+  toast.classList.remove('show');
+}
+
+const isStaging = window.location.href.includes('/staging') ||
+                  window.location.hostname.includes('nc4tt.github.io');
+
+if (isStaging) {
+  setTimeout(() => {
+    document.getElementById('staging-toast').classList.add('show');
+  }, 2000);
+}
 </script>
+<!-- Staging toast -->
+<div id="staging-toast">
+  <div class="toast-dot"></div>
+  <div class="toast-body">
+    <div class="toast-title">staging / beta</div>
+    <div class="toast-msg">unstable version of noodles. may be unstable for you and everyone.</div>
+  </div>
+  <button class="toast-close" onclick="dismissToast()">✕</button>
+</div>
+
 </body>
 </html>
